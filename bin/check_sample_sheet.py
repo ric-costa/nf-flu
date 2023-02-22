@@ -27,7 +27,7 @@ def adjust_reads_path(p: str) -> str:
             or p.endswith(".fq")
             or p.endswith(".fq.gz")
     ), 'FASTQ file "{p}" does not have expected extension: ".fastq", ".fastq.gz", ".fq", ".fq.gz"'
-    if p.startswith("http") or p.startswith("ftp"):
+    if p.startswith("http") or p.startswith("ftp") or p.startswith("az"):
         return p
     else:
         path = Path(p)
