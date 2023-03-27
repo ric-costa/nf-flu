@@ -20,6 +20,7 @@ include { GUNZIP_NCBI_FLU_FASTA } from '../modules/local/misc'
 include { BLAST_MAKEBLASTDB } from '../modules/local/blast_makeblastdb'
 include { BLAST_BLASTN } from '../modules/nf-core/modules/blast/blastn/main'
 include { CAT_FASTQ } from '../modules/nf-core/modules/cat/fastq/main'
+include { NEXTCLADE_RUN } from '../modules/nf-core/modules/nextclade/run/main'
 
 //=============================================================================
 // Workflow Params Setup
@@ -83,4 +84,43 @@ workflow ILLUMINA {
 
   ch_blast = BLAST_BLASTN.out.txt.collect({ it[1] })
   SUBTYPING_REPORT(ch_influenza_metadata, ch_blast)
+
+
+  outputPath = "$params.outdir"
+  subtypesPath = "$outputPath/subtypes.csv"
+  referencePath = "az://assets/flu" //#FIXME
+  irmaDir = "$outputPath/irma"
+
+  params.nextclade_dataset = null   
+  SUBTYPING_REPORT.out.report
+  .splitCsv(header: ['sample', 'subtype'], skip: 1)
+  .filter (row -> row.subtype.length() >  1) //filter out samples with no determined subtypes
+  .map { row ->
+      def sample = row.sample
+      def subtype = row.subtype
+      println ("Staging sample ${sample} (${subtype} subtype) for clade analysis.")
+      if ( subtype.length() <  2)
+          println ("   -Skipping sample ${sample}. No subtype determined") //FIXME
+      if ( subtype.startsWith('H1') ) {
+          dataset = "${referencePath}/flu_h1n1pdm_ha"
+      } else {
+          if ( subtype.startsWith('H3') ) {
+              dataset =  "${referencePath}/flu_h3n2_ha"
+          } else { 
+              println ("Sample HA subtype other than H1 or H3 found for sample ${sample}") 
+          }   
+      }
+      fasta = "${irmaDir}/${sample}.irma.consensus.fasta"
+      [ sample, fasta, dataset ]
+  }
+  .set { ch_samples }
+  ch_samples.view()
+
+
+    NEXTCLADE_RUN (
+        ch_samples.map {it -> [it[0], it[1]]},
+        ch_samples.map {it -> [it[2]]}
+    )
+  
+
 }

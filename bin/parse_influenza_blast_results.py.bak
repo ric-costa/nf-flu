@@ -518,10 +518,6 @@ def write_excel(
                 worksheet.set_column(i, i, width)
             idx += 1
     logging.info('Done writing worksheets to spreadsheet "%s".', output_dest)
-    #convert subtypes .xlsx file to .csv
-    subtypesPath = "subtypes.csv"
-    read_file = pd.read_excel(output_dest)
-    read_file.to_csv (subtypesPath, encoding='utf-8', index = False, header = True)
 
 
 if __name__ == "__main__":
