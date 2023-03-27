@@ -33,7 +33,8 @@ process SUBTYPING_REPORT {
   path(blastn_results)
 
   output:
-  path('iav-subtyping-report.xlsx'), emit: report
+  path('subtypes.csv'), emit: report
+
   path('parse_influenza_blast_results.log'), emit: log
   path "versions.yml", emit: versions
 
