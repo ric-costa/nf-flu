@@ -32,13 +32,13 @@
                 "ref_db": {
                     "type": "string",
                     "fa_icon": "fas fa-hdd",
-                    "description": "Provide fasta database of interesting reference sequences",
+                    "description": "Path to fasta database of reference sequences alternative to NCBI (optional)",
                     "default": ""
                 },
                 "outdir": {
                     "type": "string",
                     "description": "The output directory where the results will be saved.",
-                    "default": "./results",
+                    "default": "az://output/EVTSEQ",
                     "fa_icon": "fas fa-folder-open"
                 }
             },
@@ -164,6 +164,12 @@
             "description": "Options common to both the Nanopore and Illumina workflows in the pipeline.",
             "default": "",
             "properties": {
+                "nextclade_datasets_folder": {
+                    "type": "string",
+                    "description": "Full path to Nextclade datasets folder required for 'nextclade run' command.",
+                    "fa_icon": "fas fa-project-diagram",
+                    "default": "az://assets/flu"
+                },
                 "skip_mosdepth": {
                     "type": "boolean",
                     "default": false,
