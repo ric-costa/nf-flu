@@ -13,6 +13,10 @@
             "properties": {
                 "input": {
                     "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.csv$",
+                    "schema": "assets/schema_input.json",
                     "fa_icon": "fas fa-file-csv",
                     "description": "Sample sheet with sample names and paths to reads."
                 },
