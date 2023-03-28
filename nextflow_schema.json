@@ -24,6 +24,7 @@
                     "type": "string",
                     "fa_icon": "fas fa-hdd",
                     "description": "NGS platform used to sequence the samples.",
+                    "default": "illumina",
                     "enum": [
                         "illumina",
                         "nanopore"
@@ -43,7 +44,8 @@
                 }
             },
             "required": [
-                "input"
+                "input",
+                "outdir"
             ]
         },"variant_calling_options": {
             "title": "Variant calling options",
