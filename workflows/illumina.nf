@@ -85,6 +85,7 @@ workflow ILLUMINA {
   ch_blast = BLAST_BLASTN.out.txt.collect({ it[1] })
   SUBTYPING_REPORT(ch_influenza_metadata, ch_blast)
 
+  subtypesPath = "$params.outdir/subtypes.csv"
   referencePath = "$params.nextclade_datasets_folder" 
   irmaDir = "$params.outdir/irma"
 
@@ -97,7 +98,7 @@ workflow ILLUMINA {
       def subtype = row.subtype
       log.info ("Staging sample ${sample} (${subtype} subtype) for clade analysis.")
       if ( subtype.length() <  2)
-          log.info ("   -Skipping sample ${sample}. No subtype determined") /
+          log.info ("   -Skipping sample ${sample}. No subtype determined") //FIXME
       if ( subtype.startsWith('H1') ) {
           dataset = "${referencePath}/flu_h1n1pdm_ha"
       } else {
@@ -111,7 +112,6 @@ workflow ILLUMINA {
       [ sample, fasta, dataset ]
   }
   .set { ch_samples }
-
 
     NEXTCLADE_RUN (
         ch_samples.map {it -> [it[0], it[1]]},
