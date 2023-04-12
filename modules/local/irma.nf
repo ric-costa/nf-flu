@@ -6,11 +6,11 @@ process IRMA {
   tag "$meta.id"
   label 'process_high'
 
-  conda (params.enable_conda ? "bioconda::irma=1.0.2" : null)
+  conda (params.enable_conda ? "bioconda::irma=1.0.3" : null)
   if (workflow.containerEngine == 'singularity' && !params.singularity_pull_docker_container) {
-    container 'https://depot.galaxyproject.org/singularity/irma:1.0.2--pl5321hdfd78af_2'
+    container 'https://depot.galaxyproject.org/singularity/irma:1.0.3--pl5321hdfd78af_0'
   } else {
-    container 'quay.io/biocontainers/irma:1.0.2--pl5321hdfd78af_2'
+    container 'quay.io/biocontainers/irma:1.0.3--pl5321hdfd78af_0'
   }
 
   input:
